@@ -1,86 +1,123 @@
 <div class="grid calculator-buttons">
   <div class="grid row-1">
-    <div class="pink-colored-col line-color-pos-right line-color-pos-left">
-      <app-button value="&percnt;"></app-button>
-    </div>
-    <div class="pink-colored-col line-color-pos-right">
-      <app-button value="CE"></app-button>
-    </div>
-    <div class="pink-colored-col line-color-pos-right">
-      <app-button value="C"></app-button>
-    </div>
-    <div class="pink-colored-col line-color-pos-right">
-      <app-button value="&larr;"></app-button>
-    </div>
+    <app-button
+      value="&percnt;"
+      cssClasses="pink-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="CE"
+      cssClasses="pink-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="C"
+      cssClasses="pink-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button value="&larr;" cssClasses="pink-colored-col"></app-button>
   </div>
+
   <div class="grid row-2">
-    <div class="pink-colored-col line-color-pos-right line-color-pos-left">
-      <button><sup>1</sup>/<sub>x</sub></button>
-    </div>
-    <div class="pink-colored-col line-color-pos-right">
-      <button>x<sup>2</sup></button>
-    </div>
-    <div class="pink-colored-col line-color-pos-right">
-      <button><sup>2</sup>&Sqrt;x</button>
-    </div>
-    <div class="pink-colored-col line-color-pos-right">
-      <app-button value="&divide;"></app-button>
-    </div>
+    <button class="pink-colored-col line-color-pos-right">
+      <sup>1</sup>/<sub>x</sub>
+    </button>
+
+    <button class="pink-colored-col line-color-pos-right">x<sup>2</sup></button>
+
+    <button class="pink-colored-col line-color-pos-right">
+      <sup>2</sup>&Sqrt;x
+    </button>
+
+    <app-button value="&divide;" cssClasses="pink-colored-col"></app-button>
   </div>
+
   <div class="grid row-3">
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="7"></app-button>
-    </div>
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="8"></app-button>
-    </div>
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="9"></app-button>
-    </div>
-    <div class="pink-colored-col line-color-pos-right">
-      <app-button value="&times;"></app-button>
-    </div>
+    <app-button
+      value="7"
+      (event)="addDigit('7')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="8"
+      (event)="addDigit('8')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="9"
+      (event)="addDigit('9')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button value="&times;" cssClasses="pink-colored-col"></app-button>
   </div>
+
   <div class="grid row-4">
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="4"></app-button>
-    </div>
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="5"></app-button>
-    </div>
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="6"></app-button>
-    </div>
-    <div class="pink-colored-col line-color-pos-right">
-      <app-button value="&minus;"></app-button>
-    </div>
+    <app-button
+      value="4"
+      (event)="addDigit('4')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="5"
+      (event)="addDigit('5')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="6"
+      (event)="addDigit('6')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button value="&minus;" cssClasses="pink-colored-col"></app-button>
   </div>
+
   <div class="grid row-5">
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="1"></app-button>
-    </div>
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="2"></app-button>
-    </div>
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="3"></app-button>
-    </div>
-    <div class="pink-colored-col line-color-pos-right">
-      <app-button value="&plus;"></app-button>
-    </div>
+    <app-button
+      value="1"
+      (event)="addDigit('1')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="2"
+      (event)="addDigit('2')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="3"
+      (event)="addDigit('3')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button value="&plus;" cssClasses="pink-colored-col"></app-button>
   </div>
+
   <div class="grid row-6">
-    <div class="mid-dark-colored-col line-color-pos-right">
-      <button><sup>&plus;</sup>/<sub>&minus;</sub></button>
-    </div>
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="0"></app-button>
-    </div>
-    <div class="digit mid-dark-colored-col line-color-pos-right">
-      <app-button value="."></app-button>
-    </div>
-    <div class="deep-pink-colored-col line-color-pos-right">
-      <app-button value="&equals;"></app-button>
-    </div>
+    <button class="mid-dark-colored-col line-color-pos-right">
+      <sup>&plus;</sup>/<sub>&minus;</sub>
+    </button>
+
+    <app-button
+      value="0"
+      (event)="addDigit('0')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="."
+      (event)="addDigit('.')"
+      cssClasses="mid-dark-colored-col line-color-pos-right"
+    ></app-button>
+
+    <app-button
+      value="&equals;"
+      cssClasses="deep-pink-colored-col"
+    ></app-button>
   </div>
 </div>
