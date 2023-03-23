@@ -1,26 +1,18 @@
-// CalculatorInput is interpreted to be calculations,
-//arithmetics and digits inputed into the calculator.
-export interface CalculatorInput {
-  //Accepts digits only.
-  digit: string;
-  //Accepts operators only.
-  symbol: string;
-  // Merges the digit and opertor to form a math operation.
-  merge: string[];
+export interface InputAttributes {
+  type: 'number' | 'symbol';
+  value: string;
 }
 
-export const input: CalculatorInput = {
+export interface InputType {
+  digit: string;
+  symbol: string;
+}
+
+export const inputType: InputType = {
   digit: '',
   symbol: '',
-  merge: [],
 };
 
-export interface CalculatorResult {
-  result: string;
-  noResult: boolean;
-}
-
-export const calcResult: CalculatorResult = {
-  result: '',
-  noResult: true,
-};
+export const operation: Map<number, InputAttributes> = new Map();
+export const result = '';
+export const noResult = false;
