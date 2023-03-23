@@ -25,6 +25,7 @@
   box-sizing: border-box;
   font-family: "Roboto Mono";
   color: var(--primary-color);
+  line-height: 0;
 }
 
 body {
@@ -49,6 +50,15 @@ h1 {
   line-height: var(--max-lheight);
 }
 
+button {
+  background-color: transparent;
+  font-size: 1.2rem;
+  border: transparent;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
 .calculator-header,
 .calculator-screen {
   padding-inline: 0.3rem;
@@ -65,4 +75,24 @@ h1 {
 .calculator-buttons {
   grid-area: buttons;
   height: 100%;
+}
+
+.pink-colored-col {
+  background-color: var(--grid-btn-fill-color-pink);
+}
+
+.deep-pink-colored-col {
+  background-color: var(--grid-btn-fill-color-deep-pink);
+}
+
+.mid-dark-colored-col {
+  background-color: var(--grid-btn-fill-color-mid-dark);
+}
+
+.line-color-pos-left {
+  border-left: 1px solid var(--grid-line-color);
+}
+
+.line-color-pos-right {
+  border-right: 1px solid var(--grid-line-color);
 }
