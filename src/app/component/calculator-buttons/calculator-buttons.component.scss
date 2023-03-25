@@ -18,6 +18,10 @@
   }
 }
 
+.row-1 {
+  border-top: none;
+}
+
 .line-color-pos-left {
   ::before {
     content: "";
@@ -52,10 +56,6 @@
 
 .mid-dark-colored-col {
   background-color: var(--grid-btn-fill-color-mid-dark);
-}
-
-.calculator-buttons:last-child {
-  border-bottom: 1px solid var(--grid-btn-fill-color-pink);
 }
 
 .row-1,
