@@ -1,1 +1,68 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: "Roboto Mono";
+  src: url(../src/assets/font/RobotoMono-VariableFont_wght.ttf);
+}
+
+:root {
+  --grid-line-color: #ff38ca;
+  --grid-btn-fill-color-pink: #f728c0;
+  --grid-btn-fill-color-deep-pink: #d318a1;
+  --grid-btn-fill-color-mid-dark: #111111d5;
+  --primary-theme: #000000;
+  --secondary-theme: "";
+  --primary-color: #ffffff;
+  --min-lheight: 0.9rem;
+  --max-lheight: 2.5rem;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto Mono";
+  color: var(--primary-color);
+}
+
+body {
+  background-color: var(--primary-theme);
+}
+
+.flex {
+  display: flex;
+}
+
+.grid {
+  display: grid;
+}
+
+p {
+  font-size: 0.9rem;
+  line-height: var(--min-lheight);
+}
+
+h1 {
+  font-size: 2.5rem;
+  line-height: var(--max-lheight);
+}
+
+.calculator-header,
+.calculator-screen {
+  padding-inline: 0.3rem;
+}
+
+.calculator-header {
+  grid-area: header;
+}
+
+.calculator-screen {
+  grid-area: screen;
+}
+
+.calculator-buttons {
+  grid-area: buttons;
+  height: 100%;
+}

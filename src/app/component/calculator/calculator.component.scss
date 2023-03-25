@@ -1,0 +1,9 @@
+.calculator {
+  grid-template-areas: "header" "screen" "buttons";
+  grid-template-columns: repeat(1, 100%);
+  grid-template-rows: auto 20vmax 1fr;
+  min-width: 320px;
+  overflow: hidden;
+  margin-inline: auto;
+  height: 100vmax;
+}

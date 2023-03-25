@@ -1,0 +1,87 @@
+.calculator-buttons {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(6, 1fr);
+}
+
+.row-1,
+.row-2,
+.row-3,
+.row-4,
+.row-5,
+.row-6 {
+  grid-template-areas: "col1 col2 col3 col4";
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--grid-line-color);
+
+  > * {
+    position: relative;
+  }
+}
+
+.line-color-pos-left {
+  ::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: var(--grid-line-color);
+    width: 1px;
+    inset-inline-start: 0;
+  }
+}
+
+.line-color-pos-right {
+  ::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: var(--grid-line-color);
+    width: 1px;
+    inset-inline-end: 0;
+  }
+}
+
+.pink-colored-col {
+  background-color: var(--grid-btn-fill-color-pink);
+}
+
+.deep-pink-colored-col {
+  background-color: var(--grid-btn-fill-color-deep-pink);
+}
+
+.mid-dark-colored-col {
+  background-color: var(--grid-btn-fill-color-mid-dark);
+}
+
+.calculator-buttons:last-child {
+  border-bottom: 1px solid var(--grid-btn-fill-color-pink);
+}
+
+.row-1,
+.row-2,
+.row-3,
+.row-4,
+.row-5,
+.row-6 {
+  :nth-child(1) {
+    grid-area: col1;
+  }
+  :nth-child(2) {
+    grid-area: col2;
+  }
+  :nth-child(3) {
+    grid-area: col3;
+  }
+  :nth-child(4) {
+    grid-area: col4;
+  }
+}
+
+button {
+  background-color: transparent;
+  border: transparent;
+  font-style: italic;
+  width: 100%;
+  height: 100%;
+}

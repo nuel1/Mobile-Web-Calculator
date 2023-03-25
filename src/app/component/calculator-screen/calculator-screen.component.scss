@@ -1,0 +1,32 @@
+.calculator-screen {
+  grid-template-columns: repeat(1, 100%);
+  grid-template-rows: auto 1fr;
+  height: 20vmax;
+  gap: 1rem;
+}
+
+.l-screen {
+  overflow-x: scroll;
+}
+
+.sm-screen {
+  height: var(--min-lheight);
+}
+
+.l-screen,
+.sm-screen {
+  text-align: right;
+}
+
+p,
+h1 {
+  display: inline-block;
+}
+
+p {
+  font-weight: 300 !important;
+}
+
+h1 {
+  white-space: nowrap;
+}
