@@ -17,6 +17,7 @@ export class CalculatorButtonsComponent {
   @Output() forSquareRoot = new EventEmitter();
   @Output() forSquare = new EventEmitter();
   @Output() forFraction = new EventEmitter();
+  @Output() forEqualTo = new EventEmitter();
 
   equal = '\uff1d';
   plus = '\uff0b';
@@ -74,5 +75,9 @@ export class CalculatorButtonsComponent {
 
   toggleForFraction() {
     this.forFraction.emit();
+  }
+
+  toggleEqualTo() {
+    this.forEqualTo.emit();
   }
 }

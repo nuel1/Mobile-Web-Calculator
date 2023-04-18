@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ignoreElements } from 'rxjs';
 
 type PastComputation = {
   firstOperand: string;
@@ -18,7 +19,9 @@ export class CalculatorComponent {
    * 00D7 *
    * 00F7	/
    */
+
   codePoints = /([\u002b])([\u002d])([\u00d7])([\u00f7])/i;
+  errorMessage = '';
 
   //firstOperand, secondOperand are number quantities which would be
   //applied together with operator for computation.
@@ -91,7 +94,7 @@ export class CalculatorComponent {
 
   convertCodeUnitToSymbol(codeunit: string) {
     /**
-     * operatorTypes contains two similar types of operator, but distinct in terms of
+     * operatorTypes contains two similar types of operators, but distinct in terms of
      * application to arithmetic operation in javascript. That is, in real-life
      * mathematical application,they can be used interchangeably.
      * Accepted type of operators for computation in javascript are "+-/*".
@@ -150,7 +153,6 @@ export class CalculatorComponent {
   /**
    *
    * @param result result returned by evaluation of an operation
-   * @returns {Boolean}
    * @description
    * Updating:
    * 1. firstOperandForComputation
@@ -161,8 +163,6 @@ export class CalculatorComponent {
     this.firstOperandForComputation = String(result);
     this.firstOperandForView = result.toLocaleString();
     this.placeHolder = this.firstOperandForView;
-
-    return true;
   }
 
   resetValueForSecondOperand() {
@@ -183,14 +183,19 @@ export class CalculatorComponent {
 
       const computationResult = eval(`${operand1}${operator}${operand2}`);
 
-      if (computationResult === Infinity && operand2 === '0') {
-        throw Error('Cannot divide by zero');
+      if (computationResult === Infinity) {
+        this.errorMessage = 'Cannot divide by zero';
+        throw Error(this.errorMessage);
       }
 
-      const previousOperationDone = this.updateComputation(computationResult);
-      if (previousOperationDone) this.resetValueForSecondOperand();
-    } catch (e) {
-      this.placeHolder = "Can't divide by zero";
+      if (isNaN(computationResult)) {
+        this.errorMessage = 'Result is undefined';
+        throw Error(this.errorMessage);
+      }
+
+      this.updateComputation(computationResult);
+    } catch (e: unknown) {
+      this.placeHolder = this.errorMessage;
       throw e;
     }
   }
@@ -262,6 +267,7 @@ export class CalculatorComponent {
         let zeroPad = this.padOperandWithZero(this.firstOperandForComputation);
         this.firstOperandForComputation = zeroPad;
         this.firstOperandForView = zeroPad;
+        console.log(this.firstOperandForComputation);
       }
 
       if (!this.hasValue(this.secondOperandForComputation)) {
@@ -278,6 +284,7 @@ export class CalculatorComponent {
         this.operatorForView = newOperatorForView;
       }
 
+      this.resetValueForSecondOperand();
       this.updateComputationToView(
         this.firstOperandForView,
         this.operatorForView
@@ -450,6 +457,43 @@ export class CalculatorComponent {
     }
   }
 
+  convertTo(convertionType: Function, expressionWrapper: Function) {
+    if (this.hasValue(this.operatorForComputation)) {
+      if (this.hasValue(this.secondOperandForComputation)) {
+        this.secondOperandForComputation = convertionType(
+          this.secondOperandForComputation
+        ).toString();
+        this.secondOperandForView = expressionWrapper(
+          this.secondOperandForView
+        );
+        this.placeHolder = Number(
+          this.secondOperandForComputation
+        ).toLocaleString();
+        this.updateComputationToView(
+          this.firstOperandForView,
+          this.operatorForComputation,
+          this.secondOperandForView
+        );
+      }
+    } else {
+      if (this.hasValue(this.firstOperandForComputation)) {
+        this.firstOperandForComputation = convertionType(
+          this.firstOperandForComputation
+        ).toString();
+        console.log(this.firstOperandForComputation);
+        this.firstOperandForView = expressionWrapper(this.firstOperandForView);
+        this.placeHolder = Number(
+          this.firstOperandForComputation
+        ).toLocaleString();
+        this.updateComputationToView(
+          this.firstOperandForView,
+          this.operatorForComputation,
+          this.secondOperandForView
+        );
+      }
+    }
+  }
+
   // Does the convertion
   toSquareRoot(operand: string) {
     return Math.sqrt(Number(operand));
@@ -461,42 +505,7 @@ export class CalculatorComponent {
   }
   // Shows result to view
   squareRoot() {
-    if (this.hasValue(this.operatorForComputation)) {
-      if (this.hasValue(this.secondOperandForComputation)) {
-        this.secondOperandForComputation = this.toSquareRoot(
-          this.secondOperandForComputation
-        ).toString();
-        this.secondOperandForView = this.wrapNumberWithSquareRoot(
-          this.secondOperandForView
-        );
-        this.placeHolder = Number(
-          this.secondOperandForComputation
-        ).toLocaleString();
-        this.updateComputationToView(
-          this.firstOperandForView,
-          this.operatorForComputation,
-          this.secondOperandForView
-        );
-      }
-    } else {
-      if (this.hasValue(this.firstOperandForComputation)) {
-        this.firstOperandForComputation = this.toSquareRoot(
-          this.firstOperandForComputation
-        ).toString();
-        console.log(this.firstOperandForComputation);
-        this.firstOperandForView = this.wrapNumberWithSquareRoot(
-          this.firstOperandForView
-        );
-        this.placeHolder = Number(
-          this.firstOperandForComputation
-        ).toLocaleString();
-        this.updateComputationToView(
-          this.firstOperandForView,
-          this.operatorForComputation,
-          this.secondOperandForView
-        );
-      }
-    }
+    this.convertTo(this.toSquareRoot, this.wrapNumberWithSquareRoot);
   }
 
   toSquare(operand: string) {
@@ -508,42 +517,7 @@ export class CalculatorComponent {
   }
 
   square() {
-    if (this.hasValue(this.operatorForComputation)) {
-      if (this.hasValue(this.secondOperandForComputation)) {
-        this.secondOperandForComputation = this.toSquare(
-          this.secondOperandForComputation
-        ).toString();
-        this.secondOperandForView = this.wrapNumberWithSquare(
-          this.secondOperandForView
-        );
-        this.placeHolder = Number(
-          this.secondOperandForComputation
-        ).toLocaleString();
-        this.updateComputationToView(
-          this.firstOperandForView,
-          this.operatorForComputation,
-          this.secondOperandForView
-        );
-      }
-    } else {
-      if (this.hasValue(this.firstOperandForComputation)) {
-        this.firstOperandForComputation = this.toSquare(
-          this.firstOperandForComputation
-        ).toString();
-        console.log(this.firstOperandForComputation);
-        this.firstOperandForView = this.wrapNumberWithSquare(
-          this.firstOperandForView
-        );
-        this.placeHolder = Number(
-          this.firstOperandForComputation
-        ).toLocaleString();
-        this.updateComputationToView(
-          this.firstOperandForView,
-          this.operatorForComputation,
-          this.secondOperandForView
-        );
-      }
-    }
+    this.convertTo(this.toSquare, this.wrapNumberWithSquare);
   }
 
   toFraction(operand: string) {
@@ -555,41 +529,57 @@ export class CalculatorComponent {
   }
 
   fraction() {
-    if (this.hasValue(this.operatorForComputation)) {
-      if (this.hasValue(this.secondOperandForComputation)) {
-        this.secondOperandForComputation = this.toFraction(
-          this.secondOperandForComputation
-        ).toString();
-        this.secondOperandForView = this.wrapNumberInFraction(
-          this.secondOperandForView
-        );
-        this.placeHolder = Number(
+    this.convertTo(this.toFraction, this.wrapNumberInFraction);
+  }
+
+  equalTo() {
+    let result: string[] = [];
+    try {
+      if (!this.hasValue(this.operatorForComputation)) {
+        result = result.concat(this.firstOperandForView, '\uff1d');
+      }
+
+      if (
+        !this.hasValue(this.secondOperandForComputation) &&
+        this.hasValue(this.operatorForComputation)
+      ) {
+        this.secondOperandForComputation = this.firstOperandForComputation;
+        this.secondOperandForView = Number(
           this.secondOperandForComputation
         ).toLocaleString();
-        this.updateComputationToView(
+
+        this.evaluateOperation();
+        result = result.concat(
           this.firstOperandForView,
-          this.operatorForComputation,
-          this.secondOperandForView
+          this.operatorForView,
+          this.secondOperandForView,
+          '\uff1d'
         );
       }
-    } else {
-      if (this.hasValue(this.firstOperandForComputation)) {
-        this.firstOperandForComputation = this.toFraction(
-          this.firstOperandForComputation
-        ).toString();
-        console.log(this.firstOperandForComputation);
-        this.firstOperandForView = this.wrapNumberInFraction(
-          this.firstOperandForView
-        );
-        this.placeHolder = Number(
-          this.firstOperandForComputation
-        ).toLocaleString();
-        this.updateComputationToView(
+
+      if (
+        this.hasValue(this.firstOperandForComputation) &&
+        this.hasValue(this.secondOperandForComputation)
+      ) {
+        result = result.concat(
           this.firstOperandForView,
-          this.operatorForComputation,
-          this.secondOperandForView
+          this.operatorForView,
+          this.secondOperandForView,
+          '\uff1d'
         );
+        this.evaluateOperation();
       }
+
+      this.updateComputationToView(...result);
+    } catch (e) {
+      result = result.concat(
+        this.firstOperandForView,
+        this.operatorForView,
+        this.secondOperandForView,
+        '\uff1d'
+      );
+      this.updateComputationToView(...result);
+      throw e;
     }
   }
 }

@@ -152,6 +152,10 @@
       (event)="toggleDecimal('.')"
     ></app-button>
 
-    <app-button [value]="equal" cssClasses="deep-pink-colored-col"></app-button>
+    <app-button
+      [value]="equal"
+      cssClasses="deep-pink-colored-col"
+      (event)="toggleEqualTo()"
+    ></app-button>
   </div>
 </div>

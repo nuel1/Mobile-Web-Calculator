@@ -4,13 +4,15 @@
 }
 
 :root {
-  --grid-line-color: #ff38ca;
-  --grid-btn-fill-color-pink: #f728c0;
-  --grid-btn-fill-color-deep-pink: #d318a1;
-  --grid-btn-fill-color-mid-dark: #111111d5;
-  --primary-theme: #000000;
-  --secondary-theme: "";
-  --primary-color: #ffffff;
+  --grid-line-color: #dbdbdb;
+  --grid-btn-fill-color: #f4f4f4ec;
+  --grid-btn-fill-color-deep: #6d97e0;
+  --grid-btn-fill-color-mid-dark: #fbfbfb;
+  --primary-theme: #dbdbdb;
+  --primary-color: #000000;
+  --grid-btn-fill-color-deep-hover: #5f8ad4;
+  --grid-btn-fill-color-mid-dark-hover: #cacaca;
+  --grid-btn-fill-color-hover: #cacaca;
   --min-lheight: 0.9rem;
   --max-lheight: 2.5rem;
 }
@@ -57,6 +59,7 @@ button {
   width: 100%;
   height: 100%;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .calculator-header,
@@ -78,15 +81,24 @@ button {
 }
 
 .pink-colored-col {
-  background-color: var(--grid-btn-fill-color-pink);
+  background-color: var(--grid-btn-fill-color);
+  &:hover {
+    background-color: var(--grid-btn-fill-color-hover);
+  }
 }
 
 .deep-pink-colored-col {
-  background-color: var(--grid-btn-fill-color-deep-pink);
+  background-color: var(--grid-btn-fill-color-deep);
+  &:hover {
+    background-color: var(--grid-btn-fill-color-deep-hover);
+  }
 }
 
 .mid-dark-colored-col {
   background-color: var(--grid-btn-fill-color-mid-dark);
+  &:hover {
+    background-color: var(--grid-btn-fill-color-mid-dark-hover);
+  }
 }
 
 .line-color-pos-left {
