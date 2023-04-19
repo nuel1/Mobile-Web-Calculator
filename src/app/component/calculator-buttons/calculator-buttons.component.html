@@ -3,121 +3,155 @@
     <app-button
       value="&percnt;"
       cssClasses="pink-colored-col line-color-pos-right"
+      (event)="toggleForPercentage()"
     ></app-button>
 
     <app-button
       value="CE"
       cssClasses="pink-colored-col line-color-pos-right"
+      (event)="toggleClearComputation()"
     ></app-button>
 
     <app-button
       value="C"
       cssClasses="pink-colored-col line-color-pos-right"
+      (event)="toggleClearScreen()"
     ></app-button>
 
-    <app-button value="&larr;" cssClasses="pink-colored-col"></app-button>
+    <app-button
+      value="&larr;"
+      cssClasses="pink-colored-col"
+      (event)="togglePop()"
+    ></app-button>
   </div>
 
   <div class="grid row-2">
-    <button class="pink-colored-col line-color-pos-right">
+    <button
+      class="pink-colored-col line-color-pos-right"
+      (click)="toggleForFraction()"
+    >
       <sup>1</sup>/<sub>x</sub>
     </button>
 
-    <button class="pink-colored-col line-color-pos-right">x<sup>2</sup></button>
+    <button
+      class="pink-colored-col line-color-pos-right"
+      (click)="toggleForSquare()"
+    >
+      x<sup>2</sup>
+    </button>
 
-    <button class="pink-colored-col line-color-pos-right">
+    <button
+      class="pink-colored-col line-color-pos-right"
+      (click)="toggleForSquareRoot()"
+    >
       <sup>2</sup>&Sqrt;x
     </button>
 
-    <app-button value="&divide;" cssClasses="pink-colored-col"></app-button>
+    <app-button
+      [value]="divide"
+      cssClasses="pink-colored-col"
+      (event)="toggleForSymbol(divide)"
+    ></app-button>
   </div>
 
   <div class="grid row-3">
     <app-button
       value="7"
-      (event)="addDigit('7')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('7')"
     ></app-button>
 
     <app-button
       value="8"
-      (event)="addDigit('8')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('8')"
     ></app-button>
 
     <app-button
       value="9"
-      (event)="addDigit('9')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('9')"
     ></app-button>
 
-    <app-button value="&times;" cssClasses="pink-colored-col"></app-button>
+    <app-button
+      [value]="times"
+      cssClasses="pink-colored-col"
+      (event)="toggleForSymbol(times)"
+    ></app-button>
   </div>
 
   <div class="grid row-4">
     <app-button
       value="4"
-      (event)="addDigit('4')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('4')"
     ></app-button>
 
     <app-button
       value="5"
-      (event)="addDigit('5')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('5')"
     ></app-button>
 
     <app-button
       value="6"
-      (event)="addDigit('6')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('6')"
     ></app-button>
 
-    <app-button value="&minus;" cssClasses="pink-colored-col"></app-button>
+    <app-button
+      [value]="minus"
+      cssClasses="pink-colored-col"
+      (event)="toggleForSymbol(minus)"
+    ></app-button>
   </div>
 
   <div class="grid row-5">
     <app-button
       value="1"
-      (event)="addDigit('1')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('1')"
     ></app-button>
 
     <app-button
       value="2"
-      (event)="addDigit('2')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('2')"
     ></app-button>
 
     <app-button
       value="3"
-      (event)="addDigit('3')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('3')"
     ></app-button>
 
-    <app-button value="&plus;" cssClasses="pink-colored-col"></app-button>
+    <app-button
+      [value]="plus"
+      cssClasses="pink-colored-col"
+      (event)="toggleForSymbol(plus)"
+    ></app-button>
   </div>
 
   <div class="grid row-6">
-    <button class="mid-dark-colored-col line-color-pos-right">
-      <sup>&plus;</sup>/<sub>&minus;</sub>
+    <button
+      class="mid-dark-colored-col line-color-pos-right"
+      (click)="toggleSubtraction()"
+    >
+      {{ plusOrMinus }}
     </button>
 
     <app-button
       value="0"
-      (event)="addDigit('0')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleForDigit('0')"
     ></app-button>
 
     <app-button
       value="."
-      (event)="addDigit('.')"
       cssClasses="mid-dark-colored-col line-color-pos-right"
+      (event)="toggleDecimal('.')"
     ></app-button>
 
-    <app-button
-      value="&equals;"
-      cssClasses="deep-pink-colored-col"
-    ></app-button>
+    <app-button [value]="equal" cssClasses="deep-pink-colored-col"></app-button>
   </div>
 </div>

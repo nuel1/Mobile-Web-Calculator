@@ -7,8 +7,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ButtonComponent {
   @Input() value = '';
-  @Output() event = new EventEmitter();
+  @Output() event = new EventEmitter<string>();
   @Input() cssClasses = '';
+  @Input() isDisabled = false;
+
   emitEvent() {
     this.event.emit(this.value);
   }

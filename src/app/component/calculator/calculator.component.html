@@ -1,5 +1,20 @@
 <div class="grid calculator">
-  <app-calculator-header> ok </app-calculator-header>
-  <app-calculator-screen [inputType]="source"></app-calculator-screen>
-  <app-calculator-buttons></app-calculator-buttons>
+  <app-calculator-header></app-calculator-header>
+  <app-calculator-screen [input]="placeHolder" [operation]="computationForView">
+  </app-calculator-screen>
+  <app-calculator-buttons
+    (forDigit)="addDigit($event)"
+    (forSymbol)="addOperator($event)"
+    (pop)="popDigit()"
+    (forDecimal)="addDecimal($event)"
+    (clearComputation)="clear()"
+    (clearScreen)="clearAll()"
+    (forPercentage)="toPercentage()"
+    (addSubstraction)="addMinusBeforeDigit()"
+    (forSquareRoot)="squareRoot()"
+    (forSquare)="square()"
+    (forFraction)="fraction()"
+  ></app-calculator-buttons>
 </div>
+
+<!-- (event)="toggleForSymbol('\u0025')" -->
