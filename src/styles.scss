@@ -10,6 +10,10 @@
   --grid-btn-fill-color-mid-dark: #fbfbfb;
   --primary-theme: #dbdbdb;
   --primary-color: #000000;
+  --history-fixed-bg: #242424c1;
+  --scroll-track-bg: #7f7f7f;
+  --history-list-item-bg: #b2afaf;
+  --history-content-bg: #dbdbdbe6;
   --grid-btn-fill-color-deep-hover: #5f8ad4;
   --grid-btn-fill-color-mid-dark-hover: #cacaca;
   --grid-btn-fill-color-hover: #cacaca;
@@ -18,7 +22,21 @@
 }
 
 ::-webkit-scrollbar {
-  width: 0;
+  width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: var(--scroll-track-bg);
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: var(--scroll-track-bg);
 }
 
 * {
@@ -27,11 +45,15 @@
   box-sizing: border-box;
   font-family: "Roboto Mono";
   color: var(--primary-color);
-  line-height: 0;
+  line-height: 1;
 }
 
 body {
   background-color: var(--primary-theme);
+}
+
+ul {
+  list-style: none;
 }
 
 .flex {
@@ -73,6 +95,10 @@ button {
 
 .calculator-screen {
   grid-area: screen;
+}
+
+.calculator-history {
+  grid-area: history;
 }
 
 .calculator-buttons {
