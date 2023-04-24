@@ -1,12 +1,12 @@
 .calculator-screen {
   grid-template-columns: repeat(1, 100%);
-  grid-template-rows: auto 1fr;
-  height: 20vmax;
+  grid-template-rows: auto auto;
   gap: 1rem;
 }
 
 .l-screen {
   overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .sm-screen {
