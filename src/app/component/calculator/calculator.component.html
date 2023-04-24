@@ -1,21 +1,20 @@
 <div class="grid calculator">
+  <app-history></app-history>
   <app-calculator-header></app-calculator-header>
-  <app-calculator-screen [input]="placeHolder" [operation]="computationForView">
+  <app-calculator-screen [input]="placeholder" [operation]="operation_UI">
   </app-calculator-screen>
   <app-calculator-buttons
-    (forDigit)="addDigit($event)"
+    (forDigit)="addNumber($event)"
     (forSymbol)="addOperator($event)"
-    (pop)="popDigit()"
-    (forDecimal)="addDecimal($event)"
+    (pop)="pop()"
+    (forDecimal)="addDecimalPoint()"
     (clearComputation)="clear()"
     (clearScreen)="clearAll()"
     (forPercentage)="toPercentage()"
-    (addSubstraction)="addMinusBeforeDigit()"
-    (forSquareRoot)="squareRoot()"
-    (forSquare)="square()"
-    (forFraction)="fraction()"
+    (addSubstraction)="toNegativeNumber()"
+    (forSquareRoot)="toSquareRoot()"
+    (forSquare)="toSquare()"
+    (forFraction)="toFraction()"
     (forEqualTo)="equalTo()"
   ></app-calculator-buttons>
 </div>
-
-<!-- (event)="toggleForSymbol('\u0025')" -->
