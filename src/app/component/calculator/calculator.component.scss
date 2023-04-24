@@ -1,13 +1,13 @@
 .calculator {
-  grid-template-areas: "header" "screen" "buttons";
+  grid-template-areas: "history" "header" "screen" "buttons";
   grid-template-columns: repeat(1, 100%);
-  grid-template-rows: auto 20% 1fr;
+  grid-template-rows: auto auto 20% 1fr;
   min-width: 320px;
   overflow: hidden;
   margin-inline: auto;
   height: 100vmax;
   max-width: 500px;
-  max-height: 594px;
+  max-height: 635px;
 }
 
 p {
