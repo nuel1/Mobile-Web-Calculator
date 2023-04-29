@@ -1,3 +1,11 @@
+// Project idea derived from official Microsoft Windows 10 standard calculator.
+
+/**
+ * Pure functions are imported here to anchor specific roles working
+ * behind the scence to provide all the necessary functions for
+ * the calculator.
+ */
+
 import { Component } from '@angular/core';
 import { getNewNumberStr } from '../../functions/digits';
 import { getNewNumberInLocaleStr } from '../../functions/digits';
@@ -12,6 +20,8 @@ import { squareRoot } from 'src/app/functions/squareroot';
 import { squareRootTemplate } from 'src/app/functions/squareroot';
 import { fraction } from 'src/app/functions/fraction';
 import { fractionTemplate } from 'src/app/functions/fraction';
+import { plusOrMinus } from 'src/app/functions/plus-minus';
+import { EvalResult } from 'src/app/functions/eval';
 
 @Component({
   selector: 'app-calculator',
@@ -26,69 +36,89 @@ export class CalculatorComponent {
    * 00F7	/
    */
 
+  //First operand in operation.
   firstNum = '';
+  // Second operand in operation.
   secondNum = '';
+  // Operator in operation.
   operator = '';
 
+  //First operand in operation serving the interface.
   firstNum_UI = '';
+  // Second operand in operation serving the interface.
   secondNum_UI = '';
+  //Operator in operator serving the interface.
   operator_UI = '';
 
+  //Shows digit as being punched in or included.
   placeholder = '0';
 
+  //Holds computation result.
   result = '';
 
+  //Holds operation error messages.
   errorMessage = '';
 
+  //Operation serving the interface.
   operation_UI = '';
 
+  /**
+   *
+   * @param numStr Passed in from child component(calculator-button), a single digit between the range 0-9.
+   */
   addNumber(numStr: string) {
     let oldNumberStr = '';
+    this.placeholder = '0';
+
+    if (this.result.length) {
+      this.firstNum = '';
+      this.firstNum_UI = '';
+      this.result = '';
+    }
+
     //if {operator} value is an empty string add numStr to {firstNum}
-    if (!this.operator) {
+    if (!this.operator.length) {
       oldNumberStr = this.firstNum;
       let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
       this.firstNum = newNumberStr;
 
-      oldNumberStr = this.firstNum_UI;
       newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
       this.firstNum_UI = newNumberStr;
       this.placeholder = this.firstNum_UI;
-    } else {
-      // If result is found, reset firstNum's value and add new value to it.
-      if (this.result) {
-        this.firstNum = '';
-        this.firstNum_UI = '';
 
-        oldNumberStr = this.firstNum;
-        let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
-        this.firstNum = newNumberStr;
-
-        oldNumberStr = this.firstNum_UI;
-        newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
-        this.firstNum_UI = newNumberStr;
-        this.placeholder = this.firstNum_UI;
-      } else {
-        oldNumberStr = this.secondNum;
-        let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
-        this.secondNum = newNumberStr;
-
-        oldNumberStr = this.secondNum_UI;
-        newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
-        this.secondNum_UI = newNumberStr;
-        this.placeholder = this.secondNum_UI;
-      }
+      return;
     }
+
+    if (this.operator.length && !this.result.length) {
+      console.log(this.result.length);
+      oldNumberStr = this.secondNum;
+      let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
+      this.secondNum = newNumberStr;
+
+      newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
+      this.secondNum_UI = newNumberStr;
+      this.placeholder = this.secondNum_UI;
+
+      return;
+    }
+
+    oldNumberStr = this.firstNum;
+    let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
+    this.firstNum = newNumberStr;
+
+    newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
+    this.firstNum_UI = newNumberStr;
+    this.placeholder = this.firstNum_UI;
   }
 
   addDecimalPoint() {
-    if (this.operator) {
+    if (!this.operator.length) {
       this.firstNum = includeDecimalPoint(this.firstNum);
       this.firstNum_UI = includeDecimalPoint(this.firstNum);
       this.placeholder = this.firstNum_UI;
     } else {
       // If result is found, reset firstNum's value and add new value to it.
-      if (this.result) {
+      if (this.result.length) {
         this.firstNum = '';
         this.firstNum_UI = '';
 
@@ -104,33 +134,46 @@ export class CalculatorComponent {
   }
 
   addOperator(unicode: string) {
-    this.operator = getNewSymbolForComputation(unicode) as string;
-    this.operator_UI = getNewSymbolForUI(unicode) as string;
     /**
      * Once result is found through the evaluate made on the operation(as seen below),
      * the initial value of {secondNum} and {result} must be reset, in order to avoid a second
      * evaluation on both the {result}(whoose value is passed to the firstNum) and {secondNum}.
      */
-    if (this.result) {
+
+    if (!this.firstNum.length) {
+      this.firstNum = '0';
+      this.firstNum_UI = '0';
+    }
+
+    this.firstNum = this.firstNum.match(/\d+\.$/)
+      ? this.firstNum.replace('.', '')
+      : this.firstNum;
+    this.firstNum_UI = this.firstNum_UI.match(/\d+\.$/)
+      ? this.firstNum_UI.replace('.', '')
+      : this.firstNum_UI;
+
+    if (this.result.length) {
       this.secondNum = '';
       this.secondNum_UI = '';
       this.result = '';
     }
 
-    const operation = `${this.firstNum || '0'}${this.operator}${
-      this.secondNum
-    }`;
+    const operation = `${this.firstNum}${this.operator}${this.secondNum}`;
 
     try {
-      const { result, resultForUI } = evaluate(operation) as any;
-
-      if (result as string) {
-        this.firstNum = result;
+      if (evaluate(operation) as EvalResult) {
+        const { resultStr, resultForUI } = evaluate(operation) as EvalResult;
+        this.secondNum = '';
+        this.secondNum_UI = '';
+        this.firstNum = resultStr;
         this.firstNum_UI = resultForUI;
         this.placeholder = this.firstNum_UI;
       }
 
-      this.operation_UI = `${this.firstNum_UI || '0'} ${this.operation_UI}`;
+      this.operator = getNewSymbolForComputation(unicode) as string;
+      this.operator_UI = getNewSymbolForUI(unicode) as string;
+
+      this.operation_UI = `${this.firstNum_UI} ${this.operator_UI}`;
     } catch (e) {
       //Determining the evaluation result to conclude on a correct error message.
       const n = eval(operation);
@@ -145,26 +188,37 @@ export class CalculatorComponent {
   }
 
   equalTo() {
-    if (this.operator && !this.secondNum) {
+    if (!this.firstNum.length) {
+      this.firstNum = '0';
+      this.firstNum_UI = '0';
+    }
+
+    this.secondNum = this.secondNum.match(/\d+\.$/)
+      ? this.secondNum.replace('.', '')
+      : this.secondNum;
+    this.secondNum_UI = this.secondNum_UI.match(/\d+\.$/)
+      ? this.secondNum_UI.replace('.', '')
+      : this.secondNum_UI;
+
+    if (this.operator.length && !this.secondNum.length) {
       this.secondNum = this.firstNum;
       this.secondNum_UI = this.firstNum_UI;
     }
 
-    const operation = `${this.firstNum || '0'}${this.operator}${
-      this.secondNum
-    }`;
+    const operation = `${this.firstNum}${this.operator}${this.secondNum}`;
+
     try {
-      const { result, resultForUI } = evaluate(operation) as any;
+      if (evaluate(operation) as EvalResult) {
+        const { resultStr, resultForUI } = evaluate(operation) as EvalResult;
+        this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI} \uff1d`;
 
-      if (result as string) {
-        this.firstNum = result;
+        this.firstNum = resultStr;
         this.firstNum_UI = resultForUI;
+        this.result = resultStr;
         this.placeholder = this.firstNum_UI;
+      } else {
+        this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI} \uff1d`;
       }
-
-      this.operation_UI = `${this.firstNum_UI || '0'} ${this.operator_UI} ${
-        this.secondNum_UI
-      } \uff1d`;
     } catch (e) {
       //Determining the evaluation result to conclude on a correct error message.
       const n = eval(operation);
@@ -172,39 +226,48 @@ export class CalculatorComponent {
       if (n === Infinity) this.errorMessage = "Can't divide by zero";
       this.placeholder = this.errorMessage;
 
-      this.operation_UI = `${(this.firstNum_UI, this.operator_UI)}`;
+      this.operation_UI = `${this.firstNum_UI} ${this.operator_UI}`;
 
       throw new Error(this.errorMessage);
     }
   }
 
   pop() {
-    if (this.operator && this.firstNum) {
+    if (!this.operator.length && this.firstNum.length) {
       this.firstNum = this.firstNum.substring(0, this.firstNum.length - 1);
-      this.firstNum_UI = Number(this.firstNum).toLocaleString();
+      this.firstNum_UI = this.firstNum.match(/\d+?\.$/)
+        ? this.firstNum
+        : Number(this.firstNum).toLocaleString();
       this.placeholder = this.firstNum_UI;
     }
 
-    if (this.operator && this.secondNum) {
+    if (this.operator.length && this.secondNum.length) {
       this.secondNum = this.secondNum.substring(0, this.secondNum.length - 1);
-      this.secondNum_UI = Number(this.secondNum).toLocaleString();
+      this.secondNum_UI = this.secondNum.match(/\d+?\.$/)
+        ? this.secondNum
+        : Number(this.secondNum).toLocaleString();
       this.placeholder = this.secondNum_UI;
     }
   }
 
   clear() {
-    if ((!this.operator || this.result) && this.firstNum) {
+    if (this.result.length && this.firstNum.length) {
       this.firstNum = '';
       this.firstNum_UI = '';
-      this.placeholder = '0';
       this.operation_UI = '';
     }
 
-    if (!this.result && this.operator && this.secondNum) {
+    if (!this.operator.length && this.firstNum.length) {
+      this.firstNum = '';
+      this.firstNum_UI = '';
+    }
+
+    if (!this.result.length && this.secondNum.length) {
       this.secondNum = '';
       this.secondNum_UI = '';
-      this.placeholder = '0';
     }
+
+    this.placeholder = '0';
   }
 
   clearAll() {
@@ -214,6 +277,9 @@ export class CalculatorComponent {
     this.secondNum = '';
     this.secondNum_UI = '';
 
+    this.operator = '';
+    this.operator_UI = '';
+
     this.result = '';
 
     this.placeholder = '0';
@@ -222,168 +288,201 @@ export class CalculatorComponent {
   }
 
   toPercentage() {
-    if (this.firstNum === this.result) {
-      /**
-       * When {result} has the same value as {firstNum}, the conversion to
-       * percentage will apply on {result} value and the {firstNum} value.
-       * Thus:
-       * result = 10;
-       * firstNum = 10;
-       * conversion -> (10 * 10)/100
-       * This same values of {result} and {firstNum} only occur after a successful evaluation
-       * of an operation.
-       */
+    if (!this.operator.length || this.result.length) {
+      if (!this.firstNum.length) {
+        this.firstNum = '0';
+        this.firstNum_UI = '0';
+      }
+
+      this.firstNum = this.firstNum.match(/\d+\.$/)
+        ? this.firstNum.replace('.', '')
+        : this.firstNum;
+      this.firstNum_UI = this.firstNum_UI.match(/\d+\.$/)
+        ? this.firstNum_UI.replace('.', '')
+        : this.firstNum_UI;
+
       this.result = convertToPercentage(this.firstNum, this.result);
       this.firstNum = this.result;
-
-      this.firstNum_UI = Number(this.firstNum).toLocaleString();
+      this.firstNum_UI = this.firstNum;
       this.placeholder = this.firstNum_UI;
-
       this.operation_UI = `${this.firstNum_UI}`;
     }
 
-    if (this.firstNum !== this.result && this.result) {
-      /**
-       * { firstNum !== result} firstNum * result.
-       * This only executes when {result} value is not same as {firstNum} value.
-       */
-      this.firstNum = convertToPercentage(
-        this.firstNum,
-        String(Math.pow(Number(this.secondNum), 0))
-      );
-      this.firstNum_UI = Number(this.firstNum).toLocaleString();
-      this.placeholder = this.firstNum_UI;
+    if (this.operator.length && !this.result.length) {
+      if (this.secondNum.length) {
+        this.secondNum = this.secondNum.match(/\d+\.$/)
+          ? this.secondNum.replace('.', '')
+          : this.secondNum;
+        this.secondNum_UI = this.secondNum_UI.match(/\d+\.$/)
+          ? this.secondNum_UI.replace('.', '')
+          : this.secondNum_UI;
+      } else {
+        this.secondNum = this.firstNum;
+      }
 
-      this.operation_UI = `${this.firstNum_UI}`;
-    }
-
-    if (!this.result && !this.secondNum) {
-      /**
-       * { result === '' && secondNum === ''}
-       * This only executes when {result} and {SecondNum} value is an empty string.
-       */
-      this.secondNum = this.firstNum;
       this.secondNum = convertToPercentage(this.firstNum, this.secondNum);
-      this.secondNum_UI = Number(this.secondNum).toLocaleString();
+      this.secondNum_UI = this.secondNum;
       this.placeholder = this.secondNum_UI;
-
       this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
-    }
-
-    if (!this.result && this.secondNum) {
-      this.secondNum = convertToPercentage(this.firstNum, this.secondNum);
-      this.secondNum_UI = Number(this.secondNum).toLocaleString();
-      this.placeholder = this.secondNum_UI;
-
-      this.operation_UI = `${this.firstNum_UI} ${this.operation_UI} ${this.secondNum_UI}`;
     }
   }
 
   toSquare() {
-    if (
-      this.firstNum === this.result ||
-      (this.firstNum !== this.result && this.result)
-    ) {
+    if (!this.operator.length || this.result.length) {
+      if (!this.firstNum.length) {
+        this.firstNum = '0';
+        this.firstNum_UI = '0';
+      }
+
+      this.firstNum = this.firstNum.match(/\d+\.$/)
+        ? this.firstNum.replace('.', '')
+        : this.firstNum;
+      this.firstNum_UI = this.firstNum_UI.match(/\d+\.$/)
+        ? this.firstNum_UI.replace('.', '')
+        : this.firstNum_UI;
+
       this.firstNum_UI = squareTemplate(this.firstNum);
       this.firstNum = square(this.firstNum);
       this.placeholder = Number(this.firstNum).toLocaleString();
       this.operation_UI = this.firstNum_UI;
+
+      this.firstNum_UI = Number(this.firstNum).toLocaleString();
     }
 
-    if (!this.result && !this.secondNum) {
-      this.secondNum = this.firstNum;
+    if (this.operator.length && !this.result.length) {
+      if (this.secondNum.length) {
+        this.secondNum = this.secondNum.match(/\d+\.$/)
+          ? this.secondNum.replace('.', '')
+          : this.secondNum;
+        this.secondNum_UI = this.secondNum_UI.match(/\d+\.$/)
+          ? this.secondNum_UI.replace('.', '')
+          : this.secondNum_UI;
+      } else {
+        this.secondNum = this.firstNum;
+      }
       this.secondNum_UI = squareTemplate(this.secondNum);
       this.secondNum = square(this.secondNum);
       this.placeholder = Number(this.secondNum).toLocaleString();
       this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
-    }
 
-    if (!this.result && this.secondNum) {
-      this.secondNum_UI = squareTemplate(this.secondNum);
-      this.secondNum = square(this.secondNum);
-      this.placeholder = Number(this.secondNum).toLocaleString();
-      this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
+      this.secondNum_UI = Number(this.secondNum).toLocaleString();
     }
   }
 
   toSquareRoot() {
-    if (
-      this.firstNum === this.result ||
-      (this.firstNum !== this.result && this.result)
-    ) {
+    if (!this.operator.length || this.result.length) {
+      if (!this.firstNum.length) {
+        this.firstNum = '0';
+        this.firstNum_UI = '0';
+      }
+
+      this.firstNum = this.firstNum.match(/\d+\.$/)
+        ? this.firstNum.replace('.', '')
+        : this.firstNum;
+      this.firstNum_UI = this.firstNum_UI.match(/\d+\.$/)
+        ? this.firstNum_UI.replace('.', '')
+        : this.firstNum_UI;
+
       this.firstNum_UI = squareRootTemplate(this.firstNum);
       this.firstNum = squareRoot(this.firstNum);
       this.placeholder = Number(this.firstNum).toLocaleString();
       this.operation_UI = this.firstNum_UI;
+
+      this.firstNum_UI = Number(this.firstNum).toLocaleString();
     }
 
-    if (!this.result && !this.secondNum) {
-      this.secondNum = this.firstNum;
+    if (this.operator.length && !this.result.length) {
+      if (this.secondNum.length) {
+        this.secondNum = this.secondNum.match(/\d+\.$/)
+          ? this.secondNum.replace('.', '')
+          : this.secondNum;
+        this.secondNum_UI = this.secondNum_UI.match(/\d+\.$/)
+          ? this.secondNum_UI.replace('.', '')
+          : this.secondNum_UI;
+      } else {
+        this.secondNum = this.firstNum;
+      }
+
       this.secondNum_UI = squareRootTemplate(this.secondNum);
       this.secondNum = squareRoot(this.secondNum);
       this.placeholder = Number(this.secondNum).toLocaleString();
       this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
-    }
 
-    if (!this.result && this.secondNum) {
-      this.secondNum_UI = squareRootTemplate(this.secondNum);
-      this.secondNum = squareRoot(this.secondNum);
-      this.placeholder = Number(this.secondNum).toLocaleString();
-      this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
+      this.secondNum_UI = Number(this.secondNum).toLocaleString();
     }
   }
 
   toFraction() {
-    if (
-      this.firstNum === this.result ||
-      (this.firstNum !== this.result && this.result)
-    ) {
+    if (!this.operator.length || this.result.length) {
+      if (!this.firstNum.length) {
+        this.firstNum = '0';
+        this.firstNum_UI = '0';
+      }
+
+      this.firstNum = this.firstNum.match(/\d+\.$/)
+        ? this.firstNum.replace('.', '')
+        : this.firstNum;
+      this.firstNum_UI = this.firstNum_UI.match(/\d+\.$/)
+        ? this.firstNum_UI.replace('.', '')
+        : this.firstNum_UI;
+
       this.firstNum_UI = fractionTemplate(this.firstNum);
-      this.firstNum = fraction(this.firstNum);
-      this.placeholder = Number(this.firstNum).toLocaleString();
       this.operation_UI = this.firstNum_UI;
+      try {
+        this.firstNum = fraction(this.firstNum);
+        this.placeholder = Number(this.firstNum).toLocaleString();
+        this.firstNum_UI = Number(this.firstNum).toLocaleString();
+      } catch (e) {
+        this.errorMessage = `Can't divide by zero`;
+        this.placeholder = this.errorMessage;
+        throw this.errorMessage;
+      }
     }
 
-    if (!this.result && !this.secondNum) {
-      this.secondNum = this.firstNum;
-      this.secondNum_UI = fractionTemplate(this.secondNum);
-      this.secondNum = fraction(this.secondNum);
-      this.placeholder = Number(this.secondNum).toLocaleString();
-      this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
-    }
+    if (this.operator.length && !this.result.length) {
+      if (this.secondNum.length) {
+        this.secondNum = this.secondNum.match(/\d+\.$/)
+          ? this.secondNum.replace('.', '')
+          : this.secondNum;
+        this.secondNum_UI = this.secondNum_UI.match(/\d+\.$/)
+          ? this.secondNum_UI.replace('.', '')
+          : this.secondNum_UI;
 
-    if (!this.result && this.secondNum) {
+        this.secondNum_UI = fractionTemplate(this.secondNum);
+        this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
+      } else {
+        this.secondNum = this.firstNum;
+      }
+
       this.secondNum_UI = fractionTemplate(this.secondNum);
-      this.secondNum = fraction(this.secondNum);
-      this.placeholder = Number(this.secondNum).toLocaleString();
       this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
+      try {
+        this.secondNum = fraction(this.secondNum);
+        this.placeholder = Number(this.secondNum).toLocaleString();
+        this.secondNum_UI = Number(this.secondNum).toLocaleString();
+      } catch (e) {
+        this.errorMessage = `Can't divide by zero`;
+        this.placeholder = this.errorMessage;
+        throw this.errorMessage;
+      }
     }
   }
 
   toNegativeNumber() {
-    if (
-      this.firstNum === this.result ||
-      (this.firstNum !== this.result && this.result)
-    ) {
-      this.firstNum_UI = fractionTemplate(this.firstNum);
-      this.firstNum = fraction(this.firstNum);
-      this.placeholder = Number(this.firstNum).toLocaleString();
-      this.operation_UI = this.firstNum_UI;
+    if (!this.operator.length || this.result.length) {
+      if (this.firstNum !== '0' && this.firstNum.length) {
+        this.firstNum_UI = plusOrMinus(this.firstNum_UI);
+        this.firstNum = plusOrMinus(this.firstNum);
+        this.placeholder = this.firstNum_UI;
+      }
     }
 
-    if (!this.result && !this.secondNum) {
-      this.secondNum = this.firstNum;
-      this.secondNum_UI = fractionTemplate(this.secondNum);
-      this.secondNum = fraction(this.secondNum);
-      this.placeholder = Number(this.secondNum).toLocaleString();
-      this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
-    }
-
-    if (!this.result && this.secondNum) {
-      this.secondNum_UI = fractionTemplate(this.secondNum);
-      this.secondNum = fraction(this.secondNum);
-      this.placeholder = Number(this.secondNum).toLocaleString();
-      this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI}`;
+    if (this.operator.length && !this.result.length) {
+      if (this.secondNum !== '0' && this.secondNum.length) {
+        this.secondNum_UI = plusOrMinus(this.secondNum_UI);
+        this.secondNum = plusOrMinus(this.secondNum);
+        this.placeholder = this.secondNum_UI;
+      }
     }
   }
 }
