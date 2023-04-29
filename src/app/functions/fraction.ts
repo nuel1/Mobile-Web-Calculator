@@ -1,5 +1,8 @@
 export const fraction = (numStr: string) => {
-  return String(1 / Number(numStr));
+  const result = eval(`1/${numStr}`);
+  if (result === Infinity) throw Error;
+
+  return String(result);
 };
 
 export const fractionTemplate = (numStr: string) => {
