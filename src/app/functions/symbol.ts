@@ -1,4 +1,4 @@
-type OperatorTypes = {
+export type OperatorTypes = {
   operatorForComputation: string;
   operatorForUI: string;
 };
@@ -15,7 +15,7 @@ const convertFromUnicodeToOperatorSymbol = (
   let operatorSymbolTypes: OperatorTypes;
 
   switch (unicode) {
-    case '\u002b':
+    case '\uff0b':
       operatorSymbolTypes = {
         operatorForComputation: '+',
         operatorForUI: unicode,
@@ -59,7 +59,7 @@ export const getNewSymbolForComputation = (unicode: string): string | Error => {
     let { operatorForComputation } = convertFromUnicodeToOperatorSymbol(
       unicode
     ) as OperatorTypes;
-    let symbol = operatorForComputation;
+    symbol = operatorForComputation;
   } catch (e) {
     throw e as Error;
   }
@@ -73,7 +73,7 @@ export const getNewSymbolForUI = (unicode: string): string | Error => {
     let { operatorForUI } = convertFromUnicodeToOperatorSymbol(
       unicode
     ) as OperatorTypes;
-    let symbol = operatorForUI;
+    symbol = operatorForUI;
   } catch (e) {
     throw e as Error;
   }
