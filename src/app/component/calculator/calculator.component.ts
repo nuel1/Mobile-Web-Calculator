@@ -10,18 +10,18 @@ import { Component } from '@angular/core';
 import { getNewNumberStr } from '../../functions/digits';
 import { getNewNumberInLocaleStr } from '../../functions/digits';
 import { includeDecimalPoint } from '../../functions/decimal';
-import { evaluate } from 'src/app/functions/eval';
-import { getNewSymbolForComputation } from 'src/app/functions/symbol';
-import { getNewSymbolForUI } from 'src/app/functions/symbol';
-import { convertToPercentage } from 'src/app/functions/percentage';
-import { square } from 'src/app/functions/square';
-import { squareTemplate } from 'src/app/functions/square';
-import { squareRoot } from 'src/app/functions/squareroot';
+import { evaluate } from '../../functions/eval';
+import { getNewSymbolForComputation } from '../../functions/symbol';
+import { getNewSymbolForUI } from '../../functions/symbol';
+import { convertToPercentage } from '../../functions/percentage';
+import { square } from '../../functions/square';
+import { squareTemplate } from '../../functions/square';
+import { squareRoot } from '../../functions/squareroot';
 import { squareRootTemplate } from 'src/app/functions/squareroot';
-import { fraction } from 'src/app/functions/fraction';
-import { fractionTemplate } from 'src/app/functions/fraction';
-import { plusOrMinus } from 'src/app/functions/plus-minus';
-import { EvalResult } from 'src/app/functions/eval';
+import { fraction } from '../../functions/fraction';
+import { fractionTemplate } from '../../functions/fraction';
+import { plusOrMinus } from '../../functions/plus-minus';
+import { EvalResult } from '../../functions/eval';
 
 @Component({
   selector: 'app-calculator',
@@ -77,17 +77,17 @@ export class CalculatorComponent {
     }
 
     //if {operator} value is an empty string add numStr to {firstNum}
-    if (!this.operator.length) {
-      oldNumberStr = this.firstNum;
-      let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
-      this.firstNum = newNumberStr;
+    // if (!this.operator.length) {
+    //   oldNumberStr = this.firstNum;
+    //   let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
+    //   this.firstNum = newNumberStr;
 
-      newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
-      this.firstNum_UI = newNumberStr;
-      this.placeholder = this.firstNum_UI;
+    //   newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
+    //   this.firstNum_UI = newNumberStr;
+    //   this.placeholder = this.firstNum_UI;
 
-      return;
-    }
+    //   return;
+    // }
 
     if (this.operator.length && !this.result.length) {
       console.log(this.result.length);
