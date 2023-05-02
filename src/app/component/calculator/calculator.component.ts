@@ -70,27 +70,37 @@ export class CalculatorComponent {
     let oldNumberStr = '';
     this.placeholder = '0';
 
-    if (this.result.length) {
+    if (this.result.length && this.result == this.firstNum) {
       this.firstNum = '';
       this.firstNum_UI = '';
-      this.result = '';
     }
 
-    //if {operator} value is an empty string add numStr to {firstNum}
-    // if (!this.operator.length) {
-    //   oldNumberStr = this.firstNum;
-    //   let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
-    //   this.firstNum = newNumberStr;
+    // if {operator} value is an empty string add numStr to {firstNum}
+    if (!this.operator.length) {
+      oldNumberStr = this.firstNum;
+      let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
+      this.firstNum = newNumberStr;
 
-    //   newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
-    //   this.firstNum_UI = newNumberStr;
-    //   this.placeholder = this.firstNum_UI;
+      newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
+      this.firstNum_UI = newNumberStr;
+      this.placeholder = this.firstNum_UI;
 
-    //   return;
-    // }
+      return;
+    }
 
-    if (this.operator.length && !this.result.length) {
-      console.log(this.result.length);
+    if (this.result.length && this.secondNum.length) {
+      oldNumberStr = this.firstNum;
+      let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
+      this.firstNum = newNumberStr;
+
+      newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
+      this.firstNum_UI = newNumberStr;
+      this.placeholder = this.firstNum_UI;
+
+      return;
+    }
+
+    if (this.operator.length) {
       oldNumberStr = this.secondNum;
       let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
       this.secondNum = newNumberStr;
@@ -101,14 +111,6 @@ export class CalculatorComponent {
 
       return;
     }
-
-    oldNumberStr = this.firstNum;
-    let newNumberStr = getNewNumberStr(oldNumberStr, numStr);
-    this.firstNum = newNumberStr;
-
-    newNumberStr = getNewNumberInLocaleStr(oldNumberStr, numStr);
-    this.firstNum_UI = newNumberStr;
-    this.placeholder = this.firstNum_UI;
   }
 
   addDecimalPoint() {
@@ -173,7 +175,7 @@ export class CalculatorComponent {
       this.operator = getNewSymbolForComputation(unicode) as string;
       this.operator_UI = getNewSymbolForUI(unicode) as string;
 
-      this.operation_UI = `${this.firstNum_UI} ${this.operator_UI}`;
+      this.operation_UI = `${this.firstNum} ${this.operator_UI}`;
     } catch (e) {
       //Determining the evaluation result to conclude on a correct error message.
       const n = eval(operation);
@@ -181,7 +183,7 @@ export class CalculatorComponent {
       if (n === Infinity) this.errorMessage = "Can't divide by zero";
       this.placeholder = this.errorMessage;
 
-      this.operation_UI = `${this.firstNum_UI} ${this.operation_UI} ${this.secondNum_UI}`;
+      this.operation_UI = `${this.firstNum} ${this.operation_UI} ${this.secondNum}`;
 
       throw new Error(this.errorMessage);
     }
@@ -210,14 +212,14 @@ export class CalculatorComponent {
     try {
       if (evaluate(operation) as EvalResult) {
         const { resultStr, resultForUI } = evaluate(operation) as EvalResult;
-        this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI} \uff1d`;
+        this.operation_UI = `${this.firstNum} ${this.operator_UI} ${this.secondNum} \uff1d`;
 
         this.firstNum = resultStr;
         this.firstNum_UI = resultForUI;
         this.result = resultStr;
         this.placeholder = this.firstNum_UI;
       } else {
-        this.operation_UI = `${this.firstNum_UI} ${this.operator_UI} ${this.secondNum_UI} \uff1d`;
+        this.operation_UI = `${this.firstNum} ${this.operator_UI} ${this.secondNum} \uff1d`;
       }
     } catch (e) {
       //Determining the evaluation result to conclude on a correct error message.
@@ -305,7 +307,7 @@ export class CalculatorComponent {
       this.firstNum = this.result;
       this.firstNum_UI = this.firstNum;
       this.placeholder = this.firstNum_UI;
-      this.operation_UI = `${this.firstNum_UI}`;
+      this.operation_UI = `${this.firstNum}`;
     }
 
     if (this.operator.length && !this.result.length) {
