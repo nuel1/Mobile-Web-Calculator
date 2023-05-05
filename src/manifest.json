@@ -4,8 +4,10 @@
   "start_url": "./",
   "theme_color": "#ffffff",
   "background_color": "#4383f3",
-  "display": "standalone",
+  "display": "fullscreen",
+  "orientation": "portrait",
   "description": "Standard Offline Calculator App",
+  "prefer_related_applications": true,
   "icons": [
     {
       "src": "/assets/images/icon/favicon-16x16.png",
@@ -34,7 +36,7 @@
     },
     {
       "src": "/assets/images/icon/android-chrome-256x256.png",
-      "sizes": "256x256",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
