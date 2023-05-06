@@ -20,10 +20,10 @@ export const evaluate = (operation: string): EvalResult | Error | undefined => {
    * 2. num - num or
    * 3. num * num or
    * 4. num / num or
-   * 5. decimal point?(num) + decimal point?(num) or
-   * 6. decimal point?(num) - decimal point?(num) or
-   * 7. decimal point?(num) * decimal point?(num) or
-   * 8. decimal point?(num) / decimal point?(num) or
+   * 5. (num)decimal point? + (num)decimal point? or
+   * 6. (num)decimal point? - (num)decimal point? or
+   * 7. (num)decimal point? * (num)decimal point? or
+   * 8. (num)decimal point? / (num)decimal point? or
    * 9. -?(num) + -?(num) or
    * 10. -?(num) - -?(num) or
    * 11. -?(num) * -?(num) or
