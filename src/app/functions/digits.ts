@@ -1,38 +1,63 @@
 /**
+ * 
+ * Trims out the first zero that preceeds `numStr`, except for decimal numbers.
  *
- * Get a new set of number or digits
+ * Involking `removeZeroAtFirstPos` on a non-decimal number with a preceeding zero,
+ * for example 0123, will trim out the first zero and return the rest of the string.
+ 
+ * ```typescript
+ * removeZeroAtFirstPos('01213') //-> 1213
+ * ```
+ * If called on a decimal number, however, will return the original string
+ * ```typescript
+ * removeZeroAtFirstPos('0.23') // -> 0.23
+ * ```
+ * @param {string} num a number.
+ * 
+ * @returns {string} numStr.
  */
-
-const removeZeroAtFirstPos = (numStr: string) => {
-  return numStr.replace(/\./, '');
+const removeZeroAtFirstPos = (num: string) => {
+  return num.replace(/\./, '');
 };
 
-const scanNumStrForProperArrangement = (numStr: string) => {
-  if (
-    numStr.length > 1 &&
-    numStr.search(/0/) === 0 &&
-    numStr.search(/\./) !== 1
-  ) {
-    return removeZeroAtFirstPos(numStr);
+/**
+ *`scanNumStrForProperArrangement` scan through `num` and calls `removeZeroAtFirstPos` if `num`
+ * is preceeded by a zero and not a decimal number.
+ *
+ * @param {string} num a number.
+ *
+ * @returns {string} numStr
+ */
+const scanNumStrForProperArrangement = (num: string) => {
+  if (num.length > 1 && num.search(/0/) === 0 && num.search(/\./) !== 1) {
+    return removeZeroAtFirstPos(num);
   }
 
-  return numStr;
+  return num;
 };
 
-export const getNewNumberStr = (oldNumberStr: string, newNumberStr: string) => {
-  const impureNumSet = oldNumberStr.concat(newNumberStr);
+/**
+ * Concatenate a single digit `newNum` to the initial set of digit(s) `initialNum`
+ * @param initialNum
+ * @param newNum
+ * @returns {string}
+ */
+export const getNewNumberStr = (initialNum: string, newNum: string) => {
+  const impureNumSet = initialNum.concat(newNum);
   const pureNumSet = scanNumStrForProperArrangement(impureNumSet);
 
   return pureNumSet;
 };
 
-export const getNewNumberInLocaleStr = (
-  oldNumberStr: string,
-  newNumberStr: string
-) => {
-  const impureNumSet = Number(
-    oldNumberStr.concat(newNumberStr)
-  ).toLocaleString();
+/**
+ * Concatenate a single digit `newNum` to the initial set of digit(s) `initialNum`,
+ * and transmute the result to a localString format.
+ * @param initialum
+ * @param newNum
+ * @returns {string}
+ */
+export const getNewNumberInLocaleStr = (initialNum: string, newNum: string) => {
+  const impureNumSet = Number(initialNum.concat(newNum)).toLocaleString();
   const pureNumSet = scanNumStrForProperArrangement(impureNumSet);
 
   return pureNumSet;

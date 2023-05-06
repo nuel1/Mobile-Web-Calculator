@@ -3,47 +3,46 @@
   "short_name": "CALC",
   "start_url": "./",
   "theme_color": "#ffffff",
-  "background_color": "#4383f3",
-  "display": "fullscreen",
+  "background_color": "#45a1f7",
+  "display": "standalone",
   "orientation": "portrait",
-  "description": "Standard Offline Calculator App",
-  "prefer_related_applications": true,
-  "related_applications": [
-    {
-      "platform": "play",
-      "id": "com.google.samples.apps.iosched"
-    }
-  ],
+  "description": "Standard Calculator App",
   "icons": [
     {
-      "src": "/assets/images/icon/favicon-16x16.png",
+      "src": "/assets/images/icon/maskable_icon_x48",
       "sizes": "16x16",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/assets/images/icon/favicon-32x32.png",
+      "src": "/assets/images/icon/maskable_icon_x72",
       "sizes": "32x32",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/assets/images/icon/favicon-150x150.png",
+      "src": "/assets/images/icon/maskable_icon_x96",
       "sizes": "150x150",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/assets/images/icon/apple-touch-icon.png",
+      "src": "/assets/images/icon/maskable_icon_x128",
       "sizes": "180x180",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/assets/images/icon/android-chrome-192x192.png",
+      "src": "/assets/images/icon/maskable_icon_x192",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/assets/images/icon/android-chrome-256x256.png",
+      "src": "/assets/images/icon/maskable_icon_x192",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
